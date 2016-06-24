@@ -101,7 +101,7 @@ public class Driver {
                 flag = false;
             }
         }
-        //For this calculation a for loop may be ncessary.This needs to get fixed so it prints the correct waitTime.
+        //For this calculation a for loop may be necessary.This needs to get fixed so it prints the correct waitTime.
         //for (int i = 0; i < Q.size(); i++) {
         //waitTime = sittingTime - arrivalTime;
         //System.out.println(waitTime);
