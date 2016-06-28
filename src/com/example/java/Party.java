@@ -1,13 +1,12 @@
 /*******************************************************************************
  * Party Class
  *
- * Description here….
+ * The party class stores the information of each party that arrives at the restaurant.
+ * Preconditions: There must be a party that arrives at the restaurant. The party must have a name, a size, and arrival time.
+ * Postconditions: Stores the party name, size, and arrival time.
  *
- * Preconditions:
- * Postconditions:
- *
- * @author Student Name
- * @date Date
+ * @author Anabetsy Rivero
+ * created on June 26, 2016
  * @version 1.0
  *
  ******************************************************************************/
@@ -19,13 +18,13 @@ public class Party {
     public int arrivalTime;
     public int size;
 
-    /**
-     * Method for accessing the arrival time of the party.
-     *
-     * @return int time
-     *
-     */
+    public Party(String n, int t, int s){
+        name= n;
+        arrivalTime = t;
+        size = s;
+    }
 
+    // Method for accessing the arrival time of the party.
     public void setArrivalTime(int arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
@@ -33,11 +32,7 @@ public class Party {
         return arrivalTime;
     }
 
-    /**
-     * Method for accessing the name of the object.
-     *
-     * @return String name
-     */
+    //Method for accessing the name of the object.
     public void setName(String name) {
         this.name = name;
     }
@@ -47,14 +42,10 @@ public class Party {
 
     @Override
     public String toString() {
-        return getName();
+        return getName()+":"+getSize()+" ";
     }
 
-    /**
-     * Method for accessing the size of the object.
-     *
-     * @return int size
-     */
+     //Method for accessing the size of the object.
     public void setSize(int size) {
         this.size = size;
     }

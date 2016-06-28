@@ -2,13 +2,13 @@ package com.example.java;
 /*******************************************************************************
  * Queue Interface
  *
- * Description here….
+ * The Queue interface is an interface that contains the transformer, and observer methods.
  *
- * Preconditions:
- * Postconditions:
+ * Preconditions: There must be a party
+ * Postconditions: Provides the transformer and observer methods for the QueueArray
  *
- * @author Student Name
- * @date Date
+ * @author Anabetsy Rivero
+ * created on June 20, 2016
  * @version 1.0
  *
  ******************************************************************************/

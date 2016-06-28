@@ -7,8 +7,8 @@ package com.example.java;
  * Preconditions:The data.txt file must exist and contain information about the parties. Lines in the file must either start with an 'A', a 'T', or a 'Q'.
  * Postconditions:Tells the party of 'name' of 'x' people to wait at the bar. Once a table is available, it tells the party that a table for 'name' of 'x' people is available. After processing all the parties, it calculates the average waiting time and tells the user which parties were never seated.
  *
- * @author Student Name
- * @date Date
+ * @author Anabetsy Rivero
+ * created on June 20, 2016
  * @version 1.0
  *
  ******************************************************************************/
@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Driver {
@@ -32,6 +33,7 @@ public class Driver {
         int tTime = 0;
         //time the party waits to be seated = time table becomes available - time party arrives
         int waitTime = 0;
+        int numSeated = 0;
         //size of party?
         int sSize = 0;
         //total time= sum of wait times for all parties. This is used for the average waiting time
@@ -43,84 +45,76 @@ public class Driver {
         System.out.println("Please, enter the name of the data file: ");
 
 
-        BufferedReader in = new BufferedReader(new FileReader("data.txt"));
         // Create new Scanner object to read user input
         Scanner sc = new Scanner(System.in);
-        String fileName = sc.next();
+        String fileName = sc.nextLine();
         //System.out.println(fileName);
         Scanner fileToRead = new Scanner(new File(fileName));
 
 
-        QueueArray Q = new QueueArray(4);
+        QueueArray Q = new QueueArray(10);
 
+        //Sets the condition for reading the first character of each line in file.
         boolean flag = true;
 
         int sittingTime = 0;
         int arrivalTime = 0;
-        while (flag == true) {
-            char action = fileToRead.next().charAt(0);
-            {
+        while ( fileToRead.hasNext() ) {
+            String[] line = fileToRead.nextLine().split(" ");
+            for (int i = 4; i < line.length; i++)
+                line[3] += " " + line[i];
+
+            char action = line[0].charAt(0);
+
+            //if line starts with 'A', enqueue party
+            if (action == 'A') {
+
+                Party p = new Party(line[3], Integer.parseInt(line[1]), Integer.parseInt(line[2]));
+                Q.enqueue(p);
+
+                System.out.println("Please wait at the bar, party " + p.getName() + " of " + p.getSize() +
+                        " people." + "(time = " + p.getTime() + ")" + "\n");
+            }
 
 
-                //if line starts with 'A', enqueue party
-                if (action == 'A') {
+            //if line starts with 'T', dequeue party from front
+            else if (action == 'T') {
 
-                    Party p = new Party();
-                    arrivalTime = fileToRead.nextInt();
-                    sSize = fileToRead.nextInt();
-                    String name = fileToRead.nextLine();
+                tTime = Integer.parseInt(line[1]);
+                Party p = (Party) Q.dequeue();
+                waitTime += (tTime - p.getTime())*p.getSize();
+                numSeated += p.getSize();
 
-                    p.name = name;
-                    Q.enqueue(p);
-
-
-                    System.out.println("Please wait at the bar, party " + name + " of " + sSize + " people." + "(time = " + arrivalTime + ")" + "\n");
-                }
-
-
-                //if line starts with 'T', dequeue party from front
-                if (action == 'T') {
-
-                    tTime = fileToRead.nextInt();
-                    Party p = (Party) Q.dequeue();
-
-
-                    //Prints when a table becomes available for a party
-                    System.out.println("Table for party" + p.toString() + " of " + sSize + "!" + "(time = " + tTime + ")" + "\n");
-
-                    //Needs to print correct totTime
-                    //totTime = totTime + sSize*(tTime - arrivalTime);
-                    //System.out.println(totTime);
-                }
+                //Prints when a table becomes available for a party
+                System.out.println("Table for party " + p.getName() + " of " +
+                        p.getSize() + "!" + "(time = " + p.getTime() + ")" + "\n");
 
 
             }
+
 
             // if line starts with 'Q' stop the simulation
-            if (action == 'Q') {
-                flag = false;
+            else if (action == 'Q') {
+                break;
             }
         }
-        //For this calculation a for loop may be necessary.This needs to get fixed so it prints the correct waitTime.
-        //for (int i = 0; i < Q.size(); i++) {
-        //waitTime = sittingTime - arrivalTime;
-        //System.out.println(waitTime);
-        // }
 
 
-        //Parties that remain in queue should be printed below.
-
+        //Prints parties that were never seated(remain in queue).
         if (!Q.isEmpty()) {
             //for (int i = 0; i < Q.size(); i++) {
-                System.out.println("The following parties were never seated:" + Q.toString());
-                }
-
-                //Still need to get program to do the math and output waitTime. Not too hard!
-                System.out.println("The average waiting time was: ");
-                System.out.println("***Simulation Terminated***");
-                System.out.println("Good bye! ");
-            }
+                System.out.println("The following parties were never seated:" + Q);
         }
+
+        //Calculates the average waiting time per guest
+        double avg = Math.round(waitTime*1.0/numSeated*100)/100d;
+
+        //Prints the average waiting time in minutes.
+        System.out.println("The average waiting time was: "+avg+" minutes");
+        System.out.println("***Simulation Terminated***");
+        System.out.println("Good bye! ");
+    }
+}
 
 
 
